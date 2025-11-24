@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Support Finder</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+</head>
+<body>
+    <div id="authContainer">
+        <div class="auth-card">
+            <div class="logo-container">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <h1>Community Support Finder</h1>
+            </div>
+            <p class="subtitle">Find local support resources in your community</p>
+
+            <div id="loginForm">
+                <h2>Welcome Back</h2>
+                <div class="input-group">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                </div>
+                <button type="button" id="loginBtn" class="btn-primary">Login</button>
+                <p class="switch-form">Don't have an account? <a href="#" id="showRegisterLink">Register</a></p>
+            </div>
+
+            <div id="registerForm" class="hidden">
+                <h2>Create Account</h2>
+                <div class="input-group">
+                    <input type="text" id="registerName" placeholder="Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="registerEmail" placeholder="Email" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="registerPassword" placeholder="Password" required>
+                </div>
+                <button type="button" id="registerBtn" class="btn-primary">Register</button>
+                <p class="switch-form">Already have an account? <a href="#" id="showLoginLink">Login</a></p>
+            </div>
+
+            <div class="info-box">
+                <strong>Demo Credentials:</strong><br>
+                Email: demo@example.com<br>
+                Password: demo123
+            </div>
+        </div>
+    </div>
+
+    <div id="mainApp" style="display:none;">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="header-title">
+                    <svg class="header-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <h1>Community Support Finder</h1>
+                </div>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+        </header>
+
+        <main class="container">
+            <section id="api-key-section" class="card">
+                <h2 class="section-title">API Configuration</h2>
+                <div class="api-config-layout">
+                    <div class="api-key-form">
+                        <input type="text" id="apiKeyInput" placeholder="Enter your TrueWay Places API Key">
+                        <button id="saveApiKeyBtn" class="btn-primary">Save Key</button>
+                    </div>
+                    <div id="apiKeyHelpBox" class="info-box api-help">
+                        <strong>How to get your free API key:</strong><br>
+                        1. Visit <a href="https://rapidapi.com/trueway/api/trueway-places" target="_blank" rel="noopener noreferrer"><strong>rapidapi.com/trueway/api/trueway-places</strong></a><br>
+                        2. Click "Subscribe to Test"<br>
+                        3. Choose "Basic" (FREE) plan - 300 requests/day<br>
+                        4. Copy your "X-RapidAPI-Key"<br>
+                        5. Paste it above and click "Save API Key"<br><br>
+                        <strong>Free tier:</strong> 300 requests/day
+                    </div>
+                </div>
+            </section>
+
+            <section id="location-section" class="card">
+                <h2 class="section-title">Search Location</h2>
+                <div class="location-controls">
+                    <div class="location-presets">
+                        <label for="presetLocationSelect">Quick Presets:</label>
+                        <select id="presetLocationSelect">
+                            <option value="">-- Select a location --</option>
+                            <option value="-1.9579,30.0913">Kigali</option>
+                            <option value="51.5074,-0.1278">UK (London)</option>
+                            <option value="43.6532,-79.3832">Canada (Toronto)</option>
+                            <option value="37.783366,-122.402325">USA (San Francisco)</option>
+                            <option value="-33.8688,151.2093">Australia (Sydney)</option>
+                        </select>
+                    </div>
+                    <div class="location-buttons">
+                        <button id="useLocationBtn" class="btn-secondary">📍 Use My Location</button>
+                        <div class="manual-location">
+                            <input type="text" id="locationInput" placeholder="Enter lat,lng (e.g., 37.7749,-122.4194)">
+                            <button id="saveLocationBtn" class="btn-secondary">Save Location</button>
+                        </div>
+                    </div>
+                    <div class="location-status">
+                        <p><strong>Searching around:</strong> <span id="locationDisplay">Default location</span></p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="search-section" class="card">
+                <h2 class="section-title">Search Community Resources</h2>
+                <form id="searchForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="searchInput">Search Query</label>
+                            <input type="text" id="searchInput" placeholder="e.g., food banks, shelters, NGOs">
+                        </div>
+                        <div class="form-group">
+                            <label for="categoryInput">Category</label>
+                            <select id="categoryInput">
+                                <option value="">All Categories</option>
+                                <option value="food">Food</option>
+                                <option value="shelter">Shelter</option>
+                                <option value="health">Health</option>
+                                <option value="education">Education</option>
+                                <option value="legal">Legal</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="radiusInput">Radius (meters)</label>
+                            <input type="number" id="radiusInput" placeholder="5000" value="5000">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary btn-search">Search</button>
+                </form>
+            </section>
+
+            <section id="stats-section" class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="statResults">0</div>
+                    <div class="stat-label">Results Found</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statSaved">0</div>
+                    <div class="stat-label">Saved Resources</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statCategory">All</div>
+                    <div class="stat-label">Current Category</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statCache">Idle</div>
+                    <div class="stat-label">Cache Status</div>
+                </div>
+            </section>
+
+            <section id="results-section" class="card">
+                <div class="results-header">
+                    <h2 class="section-title">Results</h2>
+                    <div class="results-controls">
+                        <div class="view-toggle">
+                            <button id="showSearchResults" class="toggle-btn active">Search Results</button>
+                            <button id="showSavedResults" class="toggle-btn">Saved Places</button>
+                        </div>
+                        <div class="sort-controls">
+                            <label for="sortSelect">Sort:</label>
+                            <select id="sortSelect">
+                                <option value="default">Default</option>
+                                <option value="az">A → Z</option>
+                                <option value="za">Z → A</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="resultsContainer" class="results-grid"></div>
+            </section>
+        </main>
+    </div>
+
+    <div id="mapModal" class="modal hidden">
+        <div class="modal-content">
+            <span id="closeMapModal" class="close">&times;</span>
+            <h3 id="mapModalTitle" class="modal-title">Location Map</h3>
+            <div id="map" style="width:100%;height:400px;"></div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Community Support Finder | Built with Vanilla JavaScript &amp; TrueWay Places API</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
