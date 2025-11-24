@@ -1,16 +1,16 @@
-\# Community Support Finder
+# Community Support Finder
 
 A web application that helps users locate nearby community support services, such as NGOs, shelters, and aid centers, using the TrueWay Places API. Built with vanilla JavaScript, HTML, and CSS.
 
   
 
-\## DEMO
+## DEMO
 
 Watch the demo video here to see the web app in action:
 
   
 
-Demo: \[https://www.loom.com/share/655576b6e897426691f86518cd05019e\]
+Demo: [https://www.loom.com/share/655576b6e897426691f86518cd05019e]
 
   
 
@@ -18,11 +18,11 @@ Name: Bodgar Kwizera
 
   
 
-GitHub: \[https://github.com/b-kwizera/community\_support\_finder\_summative\]
+GitHub: [https://github.com/b-kwizera/community_support_finder_summative]
 
   
 
-Website: \[www.globalafri.tech\]
+Website: [www.globalafri.tech]
 
   
 
@@ -644,11 +644,11 @@ Contact
 
 Name: Bodgar Kwizera
 
-Email: \[PLACEHOLDER\_EMAIL\]
+Email: [b.kwizera@alustudent.com]
 
-GitHub: \[https://github.com/b-kwizera/community\_support\_finder\_summative\]
+GitHub: [https://github.com/b-kwizera/community_support_finder_summative]
 
-Demo: \[https://www.loom.com/share/655576b6e897426691f86518cd05019e\]
+Demo: [https://www.loom.com/share/655576b6e897426691f86518cd05019e\]
 
   
 
